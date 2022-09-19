@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Amazon.Migrations
+namespace AmazonAPI.Migrations
 {
     public partial class cascade6 : Migration
     {

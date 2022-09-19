@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Amazon.Models
+namespace AmazonAPI.Models
 {
     public class Category
     {

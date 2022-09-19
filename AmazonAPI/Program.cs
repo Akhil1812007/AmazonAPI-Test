@@ -1,6 +1,6 @@
-using Amazon.Models;
-using Amazon.Repository;
-using Amazon.Services;
+using AmazonAPI.Models;
+using AmazonAPI.Repository;
+using AmazonAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

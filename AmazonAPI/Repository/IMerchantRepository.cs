@@ -1,7 +1,7 @@
-﻿using Amazon.Models;
+﻿using AmazonAPI.Models;
 using AmazonAPI.Models;
 
-namespace Amazon.Repository
+namespace AmazonAPI.Repository
 {
     public interface IMerchantRepository 
     {

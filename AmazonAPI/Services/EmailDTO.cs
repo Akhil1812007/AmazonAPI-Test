@@ -1,4 +1,4 @@
-﻿namespace Amazon.Services
+﻿namespace AmazonAPI.Services
 {
     public class EmailDTO
     {

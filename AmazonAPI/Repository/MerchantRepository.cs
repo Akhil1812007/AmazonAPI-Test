@@ -1,12 +1,11 @@
-﻿using Amazon.Models;
-using AmazonAPI.Models;
+﻿using AmazonAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Amazon.Repository
+namespace AmazonAPI.Repository
 {
     public  class MerchantRepository : IMerchantRepository
     {
@@ -16,6 +15,11 @@ namespace Amazon.Repository
         {
             _context = context;
             _configuration = configuration;
+        }
+
+        public MerchantRepository(AmazonContext context)
+        {
+            _context = context;
         }
 
         public  async Task DeleteMerchant(int? MerchantId)

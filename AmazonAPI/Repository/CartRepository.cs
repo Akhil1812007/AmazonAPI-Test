@@ -1,7 +1,7 @@
-﻿using Amazon.Models;
+﻿using AmazonAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Amazon.Repository
+namespace AmazonAPI.Repository
 {
     
     public class CartRepository : ICartRepository

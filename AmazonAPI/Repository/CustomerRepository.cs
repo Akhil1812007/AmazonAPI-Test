@@ -1,6 +1,6 @@
-﻿using Amazon.Models;
+﻿using AmazonAPI.Models;
 
-namespace Amazon.Repository
+namespace AmazonAPI.Repository
 {
     public class CustomerRepository : ICustomerRepository
     {

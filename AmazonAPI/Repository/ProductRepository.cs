@@ -1,8 +1,8 @@
-﻿using Amazon.Models;
+﻿using AmazonAPI.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
-namespace Amazon.Repository
+namespace AmazonAPI.Repository
 {
     public class ProductRepository : IProductRepository
     {

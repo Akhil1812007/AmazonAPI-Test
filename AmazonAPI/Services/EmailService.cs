@@ -3,7 +3,7 @@ using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
 
-namespace Amazon.Services
+namespace AmazonAPI.Services
 {
     public class EmailService :IEmailService
     {

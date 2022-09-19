@@ -1,8 +1,8 @@
-﻿using Amazon.Services;
+﻿using AmazonAPI.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Amazon.Controllers
+namespace AmazonAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

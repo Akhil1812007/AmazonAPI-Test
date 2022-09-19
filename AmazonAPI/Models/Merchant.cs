@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Amazon.Models
+namespace AmazonAPI.Models
 {
     public class Merchant
     {
@@ -11,7 +12,7 @@ namespace Amazon.Models
         [Required(ErrorMessage = "Field can't be empty")]
         [DataType(DataType.EmailAddress, ErrorMessage = "E-mail is not valid")]
         public string? MerchantEmail { get; set; }
-        
+
         public string? MerchantName { get; set; }
 
         [DataType(DataType.PhoneNumber)]
@@ -26,6 +27,7 @@ namespace Amazon.Models
         [Compare("MerchantPassword", ErrorMessage = "Passwords don not match")]
         public string? ConfirmPassword { get; set; }
         public ICollection<Product>? Products { get; set; }
+
         
     }
 }

@@ -1,11 +1,11 @@
-﻿using Amazon.Models;
-using Amazon.Repository;
+﻿using AmazonAPI.Models;
+using AmazonAPI.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Amazon.Controllers
+namespace AmazonAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

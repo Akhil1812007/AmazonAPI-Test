@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Amazon.Migrations
+namespace AmazonAPI.Migrations
 {
     public partial class mig1 : Migration
     {

@@ -1,4 +1,4 @@
-﻿using Amazon.Models;
+﻿using AmazonAPI.Models;
 
 namespace AmazonAPI.Models
 {

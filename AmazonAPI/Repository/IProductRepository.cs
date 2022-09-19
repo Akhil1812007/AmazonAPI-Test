@@ -1,7 +1,7 @@
-﻿using Amazon.Models;
+﻿using AmazonAPI.Models;
 using Microsoft.AspNetCore.JsonPatch;
 
-namespace Amazon.Repository
+namespace AmazonAPI.Repository
 {
     public interface IProductRepository
     {

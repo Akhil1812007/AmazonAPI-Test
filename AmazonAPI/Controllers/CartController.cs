@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Amazon.Models;
-using Amazon.Repository;
+using AmazonAPI.Models;
+using AmazonAPI.Repository;
 
-namespace Amazon.Controllers
+namespace AmazonAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
