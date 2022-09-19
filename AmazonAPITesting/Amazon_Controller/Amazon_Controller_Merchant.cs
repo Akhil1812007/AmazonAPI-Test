@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Xunit;
 
 namespace AmazonAPITesting.Amazon_Controller
 {
@@ -64,10 +65,33 @@ namespace AmazonAPITesting.Amazon_Controller
 
 
         }
-        private static T GetObjectResultContent<T>(ActionResult<T> result)
+        [Fact]
+        public async Task PutMerchant_ReturnMerchant()
         {
-            return (T)((ObjectResult)result.Result).Value;
+            //Arrange
+            var Id = 1001;
+            Merchant merchant = new Merchant
+            {
+                MerchantId = Id,
+                MerchantEmail = "akhil1@gmail.com",
+                MerchantName = "Akhil1",
+                MerchantPassword = "12345",
+                ConfirmPassword = "12345",
+            };
+            A.CallTo(() => _merchantRepository.UpdateMerchant(1001,merchant)).Returns(merchant);
+            var MerchantController = new MerchantController(_merchantRepository);
+            //Act
+            var TempResult= await MerchantController.PutMerchant(Id, merchant);
+            var result = TempResult.Value;
+            //Assert
+            var name = "Akhil1";
+            result.Should().BeOfType<Merchant>();
+            name.Should().BeEquivalentTo(result.MerchantName);
+            result.Should().BeSameAs(name.Equals(result.MerchantName));
+            
+
         }
+
 
 
 

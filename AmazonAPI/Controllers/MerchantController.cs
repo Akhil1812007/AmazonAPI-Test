@@ -56,8 +56,14 @@ namespace AmazonAPI.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Merchant>> PutMerchant(int id, Merchant merchant)
         {
-            return await _repository.UpdateMerchant(id, merchant);
-           
+            try
+            {
+                return await _repository.UpdateMerchant(id, merchant);
+            }
+            catch
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost]
@@ -70,7 +76,7 @@ namespace AmazonAPI.Controllers
 
    
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMerchant(int id)
+        public async Task<ActionResult> DeleteMerchant(int id)
         {
             await _repository?.DeleteMerchant(id);  
 
