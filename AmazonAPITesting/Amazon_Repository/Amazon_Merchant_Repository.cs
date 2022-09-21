@@ -2,6 +2,7 @@
 using AmazonAPI.Repository;
 using FakeItEasy;
 using FluentAssertions;
+using FluentAssertions.Equivalency.Tracing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -74,32 +75,7 @@ namespace AmazonAPITesting.Amazon_Repository
 
 
         }
-        [Fact]
-        public async Task UpdateMerchant_Merchant()
-        {
-            //Arrange
-
-            var Id = 1001;
-            Merchant merchant = new Merchant
-            {
-                MerchantId = Id,
-                MerchantEmail = "akhil1@gmail.com",
-                MerchantName = "updatedAkhil",
-                MerchantPassword = "12345",
-                ConfirmPassword = "12345",
-            };
-            var dbContext = await GetDatabaseContext();
-            var merchantRepository = new MerchantRepository(dbContext);
-            
-
-            //Act
-            var result = await merchantRepository.UpdateMerchant(Id,merchant);
-            //Assert
-
-            var name = result.MerchantName;
-            "updatedAkhil".Should().BeEquivalentTo(name);
-
-        }
+        
         [Fact]
         public async Task DeleteMercahnt_Returnbool()
         {
@@ -109,9 +85,72 @@ namespace AmazonAPITesting.Amazon_Repository
 
             //Act
             var result= await merchantRepository.DeleteMerchant(1000);
-
+            Console.WriteLine(dbContext.ChangeTracker.DebugView.ShortView);
+            foreach (var tracker in dbContext.ChangeTracker.Entries<Merchant>())
+            {
+                Console.WriteLine(tracker.State);
+                Console.WriteLine(dbContext.ChangeTracker.DebugView.ShortView);
+            }
             //Assert
             result.Should().BeTrue();
+
+        }
+        [Fact]
+        public async Task MerchantRepo_UpdateMerchant_ReturnMerchant()
+        {
+            //Arrange
+            var id = 1001;
+            Merchant traders = new Merchant()
+            {
+                MerchantId = id,
+                MerchantEmail = "abc1@gmail.com",
+                MerchantName = "abcrdrrd",
+                MerchantPassword = "12345678",
+                ConfirmPassword = "12345678",
+            };
+
+            var dbContext = await GetDatabaseContext();
+            var traderRepository = new MerchantRepository(dbContext);
+            //Act
+            var trader = await dbContext.Merchants.FindAsync(id);
+            //dbContext.Entry<Merchant>(trader).State = EntityState.Detached;//has to be used only on xUnittesting
+            foreach (var tracker in dbContext.ChangeTracker.Entries<Merchant>())
+            {
+                Console.WriteLine(tracker.State);
+            }
+            trader = traders;
+            var result = await traderRepository.UpdateMerchant(id, traders);
+            //Assert
+            result.Should().BeEquivalentTo(traders);
+            dbContext.Merchants.Should().HaveCount(10);
+            foreach(var tracker in dbContext.ChangeTracker.Entries<Merchant>())
+            {
+                Console.WriteLine(tracker.State);
+            }
+        }
+        [Fact]
+        public async Task MerchantRepo_AddMerchant_ReturnMerchant()
+        {
+            Merchant merchant = new Merchant()
+            {
+                MerchantEmail = "Akhil@gmail.com",
+                MerchantName = "abc3",
+                MerchantPassword = "12345678",
+                ConfirmPassword = "12345678",
+            };
+            //Arrange
+            var dbContext = await GetDatabaseContext();
+            var traderRepository = new MerchantRepository(dbContext);
+            //Act
+            var result = await traderRepository.InsertMerchant(merchant);
+            //Assert
+            result.Should().BeEquivalentTo(merchant);
+            dbContext.Merchants.Count().Should().Be(11);
+            foreach (var tracker in dbContext.ChangeTracker.Entries<Merchant>())
+            {
+                //Console.WriteLine(tracker.State);
+                Console.WriteLine(dbContext.ChangeTracker.DebugView.ShortView);
+            }
 
         }
 

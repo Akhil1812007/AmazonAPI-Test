@@ -12,6 +12,7 @@ using FluentAssertions;
 using Xunit;
 using FluentAssertions.Equivalency.Tracing;
 using NuGet.Protocol.Core.Types;
+using Microsoft.EntityFrameworkCore;
 
 namespace AmazonAPITesting.Amazon_Controller
 {
@@ -56,11 +57,11 @@ namespace AmazonAPITesting.Amazon_Controller
 
         }
         [Fact]
-        public async Task MerchantController_GetMGetProductByMerchantId_Merchant()
+        public async Task MerchantController_GetByMerchantId_Merchant()
         {
             //Arrange
             var merchantId = 1000;
-            Merchant merchant = new Merchant
+            Merchant merchant = new Merchant()
             {
                 MerchantId = merchantId,
                 MerchantEmail = "akhil1@gmail.com",
@@ -186,6 +187,7 @@ namespace AmazonAPITesting.Amazon_Controller
             result.Should().NotBeNull();
 
         }
+        
     }
 }
 

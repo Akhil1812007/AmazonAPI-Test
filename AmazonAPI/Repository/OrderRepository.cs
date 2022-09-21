@@ -50,7 +50,7 @@ namespace AmazonAPI.Repository
         public async  Task<OrderMaster> GetOrderMasterById(int orderMasterId)
         {
 
-            var od = await _context.OrderMasters.FindAsync(orderMasterId);
+            var od = await  _context.OrderMasters.FindAsync(orderMasterId);
             return od;
         }
        
