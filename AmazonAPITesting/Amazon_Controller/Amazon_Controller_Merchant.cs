@@ -114,7 +114,7 @@ namespace AmazonAPITesting.Amazon_Controller
             //Arrange
             var merchantId = 1000;
            
-            A.CallTo(() => _merchantRepository.DeleteMerchant(merchantId)).Returns(false);
+            A.CallTo(() => _merchantRepository.DeleteMerchant(merchantId)).Returns(true);
             var Merchant = new MerchantController(_merchantRepository);
 
             //Act

@@ -113,12 +113,12 @@ namespace AmazonAPITesting.Amazon_Repository
             var traderRepository = new MerchantRepository(dbContext);
             //Act
             var trader = await dbContext.Merchants.FindAsync(id);
-            //dbContext.Entry<Merchant>(trader).State = EntityState.Detached;//has to be used only on xUnittesting
+            dbContext.Entry<Merchant>(trader).State = EntityState.Detached;//has to be used only on xUnittesting
             foreach (var tracker in dbContext.ChangeTracker.Entries<Merchant>())
             {
                 Console.WriteLine(tracker.State);
             }
-            trader = traders;
+            
             var result = await traderRepository.UpdateMerchant(id, traders);
             //Assert
             result.Should().BeEquivalentTo(traders);
@@ -148,7 +148,7 @@ namespace AmazonAPITesting.Amazon_Repository
             dbContext.Merchants.Count().Should().Be(11);
             foreach (var tracker in dbContext.ChangeTracker.Entries<Merchant>())
             {
-                //Console.WriteLine(tracker.State);
+                //Console.WriteLine(tracker.State); 
                 Console.WriteLine(dbContext.ChangeTracker.DebugView.ShortView);
             }
 
