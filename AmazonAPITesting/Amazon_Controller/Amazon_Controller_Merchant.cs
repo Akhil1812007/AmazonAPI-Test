@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
+using FluentAssertions.Equivalency.Tracing;
+using NuGet.Protocol.Core.Types;
 
 namespace AmazonAPITesting.Amazon_Controller
 {
@@ -25,6 +27,20 @@ namespace AmazonAPITesting.Amazon_Controller
         {
             //Arrange
             var MerchantList = new List<Merchant>();
+            int temp = 1000;
+            for(int i=0; i < 10; i++)
+            {
+                Merchant merchant = new Merchant
+                {
+                    MerchantId = ++temp,
+                    MerchantEmail = "akhil"+i+"@gmail.com",
+                    MerchantName = "Akhil"+i,
+                    MerchantPassword = "12345",
+                    ConfirmPassword = "12345",
+                };
+                MerchantList.Add(merchant); 
+            } 
+                
 
             A.CallTo(() => _merchantRepository.GetMerchant()).Returns(MerchantList);
             var MerchantController = new MerchantController(_merchantRepository);
@@ -47,8 +63,8 @@ namespace AmazonAPITesting.Amazon_Controller
             Merchant merchant = new Merchant
             {
                 MerchantId = merchantId,
-                MerchantEmail = "akhil@gmail.com",
-                MerchantName = "akhil",
+                MerchantEmail = "akhil1@gmail.com",
+                MerchantName = "Akhil",
                 MerchantPassword = "12345",
                 ConfirmPassword = "12345",
             };
@@ -87,14 +103,95 @@ namespace AmazonAPITesting.Amazon_Controller
             var name = "Akhil1";
             result.Should().BeOfType<Merchant>();
             name.Should().BeEquivalentTo(result.MerchantName);
-            result.Should().BeSameAs(name.Equals(result.MerchantName));
-            
+
+            "Akhil1".Should().Be(result.MerchantName);
 
         }
+        [Fact]
+        public async Task DeleteMerchant_ReturnVoid()
+        {
+            //Arrange
+            var merchantId = 1000;
+           
+            A.CallTo(() => _merchantRepository.DeleteMerchant(merchantId)).Returns(false);
+            var Merchant = new MerchantController(_merchantRepository);
+
+            //Act
+            var result = await Merchant.DeleteMerchant(merchantId);
+            //Assert
+            result.Should().BeOfType(typeof(OkResult));
+        }
+        [Fact]
+        public async Task MerchantController_PostMerchant_Merchant()
+        {
+            //Arrange
+            Merchant merchant = new Merchant()
+            {
+                MerchantId = 1001,
+                MerchantEmail = "akhil@gmail.com",
+                MerchantName = "akhil",
+                MerchantPassword = "12345",
+                ConfirmPassword = "12345",
 
 
 
+            };
+            //var traderspost = A.Fake<Traders>();
+           
+            A.CallTo(() => _merchantRepository.InsertMerchant(merchant)).Returns(merchant);
+            var controller = new MerchantController(_merchantRepository);
 
 
+
+            //Act
+            var result = await controller.PostMerchant(merchant);
+
+
+
+            //Assert
+            "akhil".Should().Be(result.Value.MerchantName);
+            "akhil@gmail.com".Should().Be(result.Value.MerchantEmail);
+            
+        }
+        [Fact]
+        public async Task MerchantController_GetProductByMerchantId_Product()
+        {
+            //Arrange           
+            var productId = 200;
+
+            List<Product> p = new List<Product>();
+            for (int i = 0; i < 3; i++)
+            {
+                Product products = new Product()
+                {
+                    MerchantId = 1000,
+                    ProductId = productId++,
+                    ProductName = "Boost",
+                    ProductQnt = 1,
+                    UnitPrice = 12,
+                    CategoryId = 1,
+                };
+                p.Add(products);
+            }
+            A.CallTo(() => _merchantRepository.GetProductByMerchantId(1000)).Returns(p);
+            var controller = new MerchantController(_merchantRepository);
+
+            //Act
+            var result = await controller.GetProductByMerchantId(1000);
+            //Assert
+            var id = 1000;
+            var count = result.Value.Count();
+            id.Should().Be(result.Value[0].MerchantId);
+            count.Should().Be(3);
+            result.Should().NotBeNull();
+
+        }
     }
 }
+
+
+
+
+
+
+    

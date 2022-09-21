@@ -74,13 +74,21 @@ namespace AmazonAPI.Controllers
           
         }
 
-   
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMerchant(int id)
         {
-            await _repository?.DeleteMerchant(id);  
+            bool merchant = await _repository.DeleteMerchant(id);
+            if (merchant)
+            {
+                await _repository?.DeleteMerchant(id);
+                return  Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
 
-            return NoContent();
         }
         [HttpPost("MerchantLogin")]
         public async Task<ActionResult<MerchantToken>> MerchantLogin(Merchant m)

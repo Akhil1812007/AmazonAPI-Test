@@ -22,17 +22,18 @@ namespace AmazonAPI.Repository
             _context = context;
         }
 
-        public  async Task DeleteMerchant(int? MerchantId)
+        public  async Task<bool> DeleteMerchant(int? MerchantId)
         {
             try
             {
                 Merchant merchant = _context.Merchants.Find(MerchantId);
                 _context.Merchants.Remove(merchant);
                 await _context.SaveChangesAsync();
+                return true;
             }
             catch
             {
-                throw new NotImplementedException();
+                return false;
             }
         }
 
