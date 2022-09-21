@@ -27,6 +27,7 @@ namespace AmazonAPITesting.Amazon_Repository
             //Assert
             var name = "abc0";
             name.Should().Be(result.CustomerName);
+            
 
         }
         [Fact]
@@ -50,6 +51,7 @@ namespace AmazonAPITesting.Amazon_Repository
             //Assert
             result.Should().BeEquivalentTo(customer);
             dbContext.Customers.Should().HaveCount(11);
+            
         }
         [Fact]
         public async Task CustomerRepo_UpdateCustomer_ReturnEdit()
@@ -70,10 +72,10 @@ namespace AmazonAPITesting.Amazon_Repository
             var CustomerRepository = new CustomerRepository(dbContext);
 
             //Act
-            //---------------------------------------------------------
-            var customerfind = await dbContext.Customers.FindAsync(customer.CustomerId);
-            dbContext.Entry<Customer>(customerfind).State = EntityState.Detached;//has to be used only on xUnittesting
-            //----------------------------------------------------------
+            
+            var  customerfind = await dbContext.Customers.FindAsync(customer.CustomerId);
+            dbContext.Entry<Customer>(customerfind).State = EntityState.Detached;
+            
             var result = await CustomerRepository.UpdateCustomer(id, customer);
             //Assert
             result.Should().BeEquivalentTo(customer);

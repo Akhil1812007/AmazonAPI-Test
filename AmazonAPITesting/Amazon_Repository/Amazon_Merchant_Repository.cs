@@ -153,6 +153,20 @@ namespace AmazonAPITesting.Amazon_Repository
             }
 
         }
+        [Fact]
+        public async Task MerchantRepo_GetAllMerchant_ReturnMerchant()
+        {
+            //Arrange
+            var dbContext = await GetDatabaseContext(); //This one calls the inmemory database
+            var MerchantRepository = new MerchantRepository(dbContext); //repo layer object calling
+
+            //Act
+            var result = await MerchantRepository.GetMerchant(); //calling the methods of repository
+            //Assert
+            var count = result.Count();
+            dbContext.Merchants.Should().HaveCount(count);
+            result.Should().NotBeNull();
+        }
 
 
     }
