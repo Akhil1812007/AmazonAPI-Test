@@ -33,8 +33,16 @@ namespace AmazonAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCart(int id)
         {
-            await _repository.DeleteFromCart(id);
-            return NoContent();
+            var ans=await _repository.DeleteFromCart(id);
+            if (ans)
+            {
+
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
 
         }
         [HttpPut("{id}")]

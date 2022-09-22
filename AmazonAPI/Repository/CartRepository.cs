@@ -28,12 +28,19 @@ namespace AmazonAPI.Repository
             
         }
        
-        public async  Task DeleteFromCart(int id)
+        public async  Task<bool> DeleteFromCart(int id)
         {
-            
+            try
+            {
                 Cart? cart = _context.carts.Find(id);
                 _context.carts.Remove(cart);
                 await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;   
+            }
             
         }
 

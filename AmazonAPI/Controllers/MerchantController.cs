@@ -82,7 +82,7 @@ namespace AmazonAPI.Controllers
             bool merchant = await _repository.DeleteMerchant(id);
             if (merchant)
             {
-                await _repository?.DeleteMerchant(id);
+                
                 return  Ok();
             }
             else

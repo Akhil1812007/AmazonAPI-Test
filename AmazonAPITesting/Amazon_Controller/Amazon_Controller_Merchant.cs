@@ -114,7 +114,7 @@ namespace AmazonAPITesting.Amazon_Controller
 
         }
         [Fact]
-        public async Task DeleteMerchant_ReturnVoid()
+        public async Task  DeleteMerchant_ReturnVoid()
         {
             //Arrange
             var merchantId = 1000;
