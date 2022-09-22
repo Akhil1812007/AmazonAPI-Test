@@ -19,9 +19,12 @@ namespace AmazonAPITesting.AmazonDBContext
             var databaseContext = new AmazonContext(options);
             databaseContext.Database.EnsureCreated();
             int temp = 1000;
-            if (await databaseContext.Merchants.CountAsync() <= 0)
-            {
-                for (int i = 0; i < 10; i++)
+            int CustomerInitial = 1000;
+            int CartInitial = 1000;
+
+
+
+            for (int i = 0; i < 10; i++)
                 {
                     databaseContext.Merchants.Add(
                         new Merchant()
@@ -37,7 +40,7 @@ namespace AmazonAPITesting.AmazonDBContext
                     databaseContext.Customers.Add(
                         new Customer()
                         {
-                            CustomerId = temp++,
+                            CustomerId = CustomerInitial++,
                             CustomerEmail = "abcd" + i + "@gmail.com",
                             CustomerName = "abc" + i,
                             CustomerPassword = "12345678",
@@ -45,13 +48,22 @@ namespace AmazonAPITesting.AmazonDBContext
                         }
 
                         );
+                    databaseContext.carts.Add(
+                    new Cart()
+                    {
+                        CustomerId = 1000,
+                        CartId = CartInitial++,
+                        ProductQuantity = 12 ,
+                        ProductId = 101 + i,
+                    }
+                   );
 
 
                     await databaseContext.SaveChangesAsync();
                     
 
                 }
-            }
+            
             return databaseContext;
 
 

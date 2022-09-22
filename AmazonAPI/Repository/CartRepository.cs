@@ -1,4 +1,6 @@
 ﻿using AmazonAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 
 namespace AmazonAPI.Repository
@@ -45,10 +47,17 @@ namespace AmazonAPI.Repository
         }
 
         public async   Task<List<Cart>>? GetAllCart(int customerId)
-        {
-            List<Cart> cartList = await (from c in _context.carts.Include(x => x.Product) where c.CustomerId == customerId select c).ToListAsync();
 
-            return  cartList;    
+        {
+            Customer customer = _context.Customers.Find(customerId);
+            List<Cart> cartList = null;
+            if (customer!= null)
+            {
+
+                 cartList = await (from c in _context.carts.Include(x => x.Product) where c.CustomerId == customerId select c).ToListAsync();
+                return cartList;
+            }
+            return cartList;  
         }
 
         public async  Task<Cart> GetCartById(int cartid)
