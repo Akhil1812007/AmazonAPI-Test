@@ -45,7 +45,8 @@ namespace AmazonAPI.Controllers
         {
             try
             {
-                return await _repository.GetMerchantByID(id);
+                var merchant= await _repository.GetMerchantByID(id);
+                return Ok(merchant);
             }
             catch
             {

@@ -73,11 +73,16 @@ namespace AmazonAPITesting.Amazon_Controller
             var MerchantController = new MerchantController(_merchantRepository);
 
             //Act
-            ActionResult<Merchant> TempResult =await  MerchantController.GetMerchant(merchantId);
-            var result = TempResult.Value;
+            var Tempresult =await  MerchantController.GetMerchant(merchantId);
+            var result= (Tempresult.Result as OkObjectResult).Value as Merchant;
+            
             //Assert
+            result.Should().NotBeNull();
+            
+            
+            
 
-            result.Should().BeOfType<Merchant>();
+            
 
 
 
@@ -163,7 +168,7 @@ namespace AmazonAPITesting.Amazon_Controller
             List<Product> p = new List<Product>();
             for (int i = 0; i < 3; i++)
             {
-                Product products = new Product()
+                Product Product = new Product()
                 {
                     MerchantId = 1000,
                     ProductId = productId++,
@@ -172,7 +177,7 @@ namespace AmazonAPITesting.Amazon_Controller
                     UnitPrice = 12,
                     CategoryId = 1,
                 };
-                p.Add(products);
+                p.Add(Product);
             }
             A.CallTo(() => _merchantRepository.GetProductByMerchantId(1000)).Returns(p);
             var controller = new MerchantController(_merchantRepository);
@@ -187,7 +192,41 @@ namespace AmazonAPITesting.Amazon_Controller
             result.Should().NotBeNull();
 
         }
-        
+        [Fact]
+        public async Task MerchantController_GetProductByTraderId_ReturnListMerchant()
+        {
+            //Arrange           
+            var merchantId = 1000;
+            var productId =1000;
+            List<Product> p = new List<Product>();
+            for (int i = 0; i < 10; i++)
+            {
+                Product Product = new Product()
+                {
+                    MerchantId = merchantId,
+                    ProductId = productId++,
+                    ProductName = "Boost",
+                    ProductQnt = 1,
+                    UnitPrice = 12,
+                    CategoryId = 1,
+                };
+                p.Add(Product);
+            }
+            A.CallTo(() => _merchantRepository.GetProductByMerchantId(merchantId)).Returns(p);
+            var controller = new MerchantController(_merchantRepository);
+
+            //Act
+            var result = await controller.GetProductByMerchantId(merchantId);
+            //Assert
+
+            1000.Should().Be(result.Value[0].MerchantId);
+            10.Should().Be(result.Value.Count);
+
+            result.Should().NotBeNull();
+
+
+        }
+
     }
 }
 
