@@ -4,7 +4,7 @@ namespace AmazonAPI.Repository
 {
     public interface ICartRepository
     {
-        Task<Cart> AddToCart(Cart cart);
+        Task<IsExistReturn> AddToCart(Cart cart);
         Task<bool> DeleteFromCart(int id);
         Task<Cart> GetCartById(int id);
         Task<List<Cart>>? GetAllCart(int CustomerId);

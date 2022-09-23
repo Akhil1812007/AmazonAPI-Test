@@ -33,7 +33,7 @@ namespace AmazonAPITesting.Amazon_Controller
                 CustomerId = 1000,
                 ProductId = id,
             };
-            A.CallTo(() => cartRepository.AddToCart(cart)).Returns(cart);
+            A.CallTo(() => cartRepository.AddToCart(cart)).Returns(new IsExistReturn(false,cart));
             var controller = new CartController(cartRepository);
             //Act
             var result = await controller.AddCart(cart);

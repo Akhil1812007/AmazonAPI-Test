@@ -55,9 +55,10 @@ namespace AmazonAPI.Controllers
         {
 
 
-            return await _repository.AddToCart(cart);
+            var ans= await _repository.AddToCart(cart);
+            return ans.cart;
         }
-       
+
 
 
 

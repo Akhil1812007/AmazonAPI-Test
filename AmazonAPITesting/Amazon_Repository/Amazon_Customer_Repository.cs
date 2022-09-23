@@ -23,10 +23,10 @@ namespace AmazonAPITesting.Amazon_Repository
             var CustomerRepository = new CustomerRepository(dbContext);
 
             //Act
-            var result = await CustomerRepository.GetCustomerById(1001);
+            var result = await CustomerRepository.GetCustomerById(2001);
             //Assert
-            var name = "abc0";
-            name.Should().Be(result.CustomerName);
+           
+            "abc1".Should().Be(result.CustomerName);
             
 
         }

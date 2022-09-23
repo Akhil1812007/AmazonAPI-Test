@@ -5,8 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AmazonAPI.Repository
 {
-    
-    public class CartRepository : ICartRepository
+    public class IsExistReturn
+    {
+        public bool isExist;
+        public  Cart cart;
+        public IsExistReturn(bool isExist,Cart cart)
+        {
+            this.isExist = isExist;
+            this.cart = cart;
+        }
+    }
+
+    public class CartRepository : ICartRepository 
     {
         
         private readonly AmazonContext _context;
@@ -15,17 +25,22 @@ namespace AmazonAPI.Repository
             _context = context;
         }
 
-        public async  Task<Cart>? AddToCart(Cart cart)
+        public async  Task<IsExistReturn>? AddToCart(Cart cart)
         {
-            if (await isCartExist(cart))
+            
+            IsExistReturn ans = await isCartExist(cart);
+            
+            if (ans.isExist)
             {
-                return cart;
+                return ans;
             }
             else
             {
+                ans.cart = cart;
                 _context.carts.Add(cart);
                 await _context.SaveChangesAsync();
-                return cart;
+
+                return ans;
             }
             
         }
@@ -65,12 +80,12 @@ namespace AmazonAPI.Repository
             var result= await (from c in _context.carts.Include(x => x.Product) where c.CartId == cartid select c).SingleAsync();
             return result;
         }
-        private async  Task<bool> isCartExist(Cart ct)
+        private async  Task<IsExistReturn> isCartExist(Cart ct)
         {
-              var cart = ( from  c in _context.carts where c.ProductId==ct.ProductId && c.CustomerId==ct.CustomerId select c).FirstOrDefault();
+            var cart = ( from  c in _context.carts where c.ProductId==ct.ProductId && c.CustomerId==ct.CustomerId select c).FirstOrDefault();
             if(cart == null)
             {
-                return false;
+                return new IsExistReturn(false,null);
             }
             else
             {
@@ -78,8 +93,9 @@ namespace AmazonAPI.Repository
                 cart.ProductQuantity += ct.ProductQuantity;
 
                 _context.carts.Update(cart);
+              
                 await _context.SaveChangesAsync();
-                return true;
+                return new IsExistReturn(true, cart); 
             }
         }
         public async  Task<Cart> UpdateCart(int id,Cart c)

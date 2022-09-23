@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace AmazonAPITesting.AmazonDBContext
 {
+    
     public class AmazonInMemoryDatabase
     {
         public async Task<AmazonContext> GetDatabaseContext()
@@ -18,18 +19,19 @@ namespace AmazonAPITesting.AmazonDBContext
                             .Options;
             var databaseContext = new AmazonContext(options);
             databaseContext.Database.EnsureCreated();
-            int temp = 1000;
-            int CustomerInitial = 1000;
-            int CartInitial = 1000;
+            int MerchantInitial = 1000;
+            int CustomerInitial = 2000;
+            int CartInitial = 3000;
+            int ProductInitial = 4000;
 
 
 
             for (int i = 0; i < 10; i++)
                 {
-                    databaseContext.Merchants.Add(
+                    databaseContext.Merchants?.Add(
                         new Merchant()
                         {
-                            MerchantId = temp++,
+                            MerchantId = MerchantInitial++,
                             MerchantEmail = "akhil" + i + "@gmail.com",
                             MerchantName = "akhil" + i,
                             MerchantPassword = "12345",
@@ -51,15 +53,26 @@ namespace AmazonAPITesting.AmazonDBContext
                     databaseContext.carts.Add(
                     new Cart()
                     {
-                        CustomerId = 1000,
+                        CustomerId = CustomerInitial,
                         CartId = CartInitial++,
                         ProductQuantity = 12 ,
-                        ProductId = 101 + i,
+                        ProductId = 4000,
                     }
                    );
+                databaseContext.Products.Add(
+                        new Product()
+                        {
+                            MerchantId = 1000,
+                            ProductId = ProductInitial++,
+                            ProductName = "Boost" + i,
+                            UnitPrice = 150 + i,
+                            ProductQnt = 12,
+                        }
+
+                        );
 
 
-                    await databaseContext.SaveChangesAsync();
+                await databaseContext.SaveChangesAsync();
                     
 
                 }
