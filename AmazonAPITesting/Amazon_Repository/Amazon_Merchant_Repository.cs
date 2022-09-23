@@ -36,10 +36,18 @@ namespace AmazonAPITesting.Amazon_Repository
                         }
 
                         );
-                    
-                    
-                    await databaseContext.SaveChangesAsync();
+                    foreach (var tracker in databaseContext.ChangeTracker.Entries<Merchant>())
+                    {
+                        //Console.WriteLine(tracker.State); 
+                        Console.WriteLine(databaseContext.ChangeTracker.DebugView.ShortView);
+                    }
 
+                    await databaseContext.SaveChangesAsync();
+                    foreach (var tracker in databaseContext.ChangeTracker.Entries<Merchant>())
+                    {
+                        //Console.WriteLine(tracker.State); 
+                        Console.WriteLine(databaseContext.ChangeTracker.DebugView.ShortView);
+                    }
                 }
             }
             return databaseContext;

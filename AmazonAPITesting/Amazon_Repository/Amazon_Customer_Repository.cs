@@ -9,6 +9,9 @@ using AmazonAPI.Repository;
 using AmazonAPI.Models;
 using Castle.Core.Resource;
 using Microsoft.EntityFrameworkCore;
+using AmazonAPI.Controllers;
+using FakeItEasy;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AmazonAPITesting.Amazon_Repository
 {
@@ -82,5 +85,6 @@ namespace AmazonAPITesting.Amazon_Repository
             dbContext.Customers.Should().HaveCount(10);
 
         }
+
     }
 }

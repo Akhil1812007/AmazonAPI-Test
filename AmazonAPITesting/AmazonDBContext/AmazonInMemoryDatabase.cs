@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AmazonAPITesting.AmazonDBContext
+ namespace AmazonAPITesting.AmazonDBContext
 {
     
     public class AmazonInMemoryDatabase
@@ -23,6 +23,7 @@ namespace AmazonAPITesting.AmazonDBContext
             int CustomerInitial = 2000;
             int CartInitial = 3000;
             int ProductInitial = 4000;
+            int orderMasterInitial = 5000;
 
 
 
@@ -59,7 +60,7 @@ namespace AmazonAPITesting.AmazonDBContext
                         ProductId = 4000,
                     }
                    );
-                databaseContext.Products.Add(
+                   databaseContext.Products.Add(
                         new Product()
                         {
                             MerchantId = 1000,
@@ -70,7 +71,17 @@ namespace AmazonAPITesting.AmazonDBContext
                         }
 
                         );
+                databaseContext.OrderMasters.Add(
+                         new OrderMaster()
+                         {
+                             OrderMasterId = orderMasterInitial++,
+                             CustomerId = 1000,
+                             CardNumber = 12345678+ ++i,
+                             total = 1200 + i,
+                             AmountPaid = 1200 + i,
 
+                         }
+                        );
 
                 await databaseContext.SaveChangesAsync();
                     

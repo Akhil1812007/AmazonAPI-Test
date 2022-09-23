@@ -88,6 +88,8 @@ namespace AmazonAPI.Repository
         {
             //Merchant _merchant = await _context.Merchants.FindAsync(MerchantId);
             _context.Update(Merchant);
+           
+            
             _context.SaveChanges();
             return Merchant;
 
