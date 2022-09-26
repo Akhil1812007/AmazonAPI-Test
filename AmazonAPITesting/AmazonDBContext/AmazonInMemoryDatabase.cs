@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 
 
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
                 {
                     databaseContext.Merchants?.Add(
                         new Merchant()
@@ -54,7 +54,7 @@ using System.Threading.Tasks;
                     databaseContext.carts.Add(
                     new Cart()
                     {
-                        CustomerId = CustomerInitial,
+                        CustomerId = 2000,
                         CartId = CartInitial++,
                         ProductQuantity = 12 ,
                         ProductId = 4000,

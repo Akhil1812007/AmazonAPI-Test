@@ -58,19 +58,20 @@ namespace AmazonAPI.Repository
         {
             if (orderMaster.AmountPaid == orderMaster.total)
             {
-                _context.Update(orderMaster);
-                await _context.SaveChangesAsync();
+                
                 List<Cart> c=(from i in _context.carts where i.CustomerId==orderMaster.CustomerId select i ).ToList();
 
                 foreach (Cart cart in c)
                 {
                     Product p = (from j in _context.Products where j.ProductId == cart.ProductId select j).Single();
                     p.ProductQnt -= cart.ProductQuantity;
-                    _context.Products.Update(p);
+                    _context.Products ?.Update(p);
 
                     _context.carts.Remove(cart);
                     _context.SaveChanges(); 
                 }
+                _context.Update(orderMaster);
+                await _context.SaveChangesAsync();
                 return orderMaster;                       
             }
             else
