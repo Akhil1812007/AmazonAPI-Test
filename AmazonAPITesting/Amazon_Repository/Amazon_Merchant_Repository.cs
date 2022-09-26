@@ -1,5 +1,6 @@
 ﻿using AmazonAPI.Models;
 using AmazonAPI.Repository;
+using AmazonAPITesting.AmazonDBContext;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Equivalency.Tracing;
@@ -174,6 +175,21 @@ namespace AmazonAPITesting.Amazon_Repository
             var count = result.Count();
             dbContext.Merchants.Should().HaveCount(count);
             result.Should().NotBeNull();
+        }
+        [Fact]
+        public async Task MerchantRepository_GetProductByMerchant_ReturnsProduct()
+        {
+            //Arrange
+            var Inmemory = new AmazonInMemoryDatabase();
+            var dbContext = await Inmemory.GetDatabaseContext();
+            var merchantRepository = new MerchantRepository(dbContext);
+
+            //Act
+            var result = await merchantRepository.GetProductByMerchantId(1000);
+            //Assert
+            var tempProduct = result[1];
+            // result.Count().Should().Be(4);
+            "Boost2".Should().Be(tempProduct.ProductName);
         }
 
 

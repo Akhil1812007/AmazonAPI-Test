@@ -98,7 +98,7 @@ namespace AmazonAPI.Controllers
 
             if (ml==null)
             {
-                return Unauthorized();
+                return null;
             }
 
             return Ok(ml);

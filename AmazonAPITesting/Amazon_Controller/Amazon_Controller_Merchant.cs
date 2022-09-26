@@ -13,6 +13,7 @@ using Xunit;
 using FluentAssertions.Equivalency.Tracing;
 using NuGet.Protocol.Core.Types;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 namespace AmazonAPITesting.Amazon_Controller
 {
@@ -226,9 +227,59 @@ namespace AmazonAPITesting.Amazon_Controller
 
 
         }
+        private static Random random = new Random();
+
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        [Fact]
+        public async Task MerchantContrpller_MerchantLogin_ReturnMercahntToken()
+        {
+
+            //Arrange
+            var exceptedToken= RandomString(20);
+            var merchant = new Merchant()
+            {
+                MerchantId = 1001,
+                MerchantEmail = "akhil@gmail.com",
+                MerchantName = "akhil",
+                MerchantPassword = "12345",
+                ConfirmPassword = "12345",
+            };
+            MerchantToken merchantToken = new MerchantToken()
+            {
+                merchant = new Merchant()
+                {
+                    MerchantId = 1001,
+                    MerchantEmail = "akhil1@gmail.com",
+                    MerchantName = "akhil1",
+                    MerchantPassword = "12345",
+                    ConfirmPassword = "12345",
+                },
+                merchantToken = exceptedToken,
+                
+
+            };
+            A.CallTo(() => _merchantRepository.MerchantLogin(merchant)).Returns(merchantToken);
+            var controller = new MerchantController(_merchantRepository);
+
+            //Act
+            var Tempresult = await controller.MerchantLogin(merchant);
+            var result = (Tempresult.Result as OkObjectResult).Value as MerchantToken;
+
+            //Assert
+            Tempresult.Should().Be(typeof(ActionResult<MerchantToken>));
+            result.merchantToken.Should().Be(exceptedToken);
+
+        }
 
     }
+
 }
+
 
 
 
