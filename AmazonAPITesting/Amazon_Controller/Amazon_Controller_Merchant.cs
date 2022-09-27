@@ -23,12 +23,11 @@ namespace AmazonAPITesting.Amazon_Controller
     public class Amazon_Controller_Merchant
     {
         private readonly IMerchantRepository _merchantRepository;
-        //private readonly IConfiguration _configuration;
-        private readonly IConfiguration _configuration ;   
+        private readonly IConfiguration _configuration;
         public Amazon_Controller_Merchant()
         {
             _merchantRepository = A.Fake<IMerchantRepository>();
-            _configuration = new  Mock<IConfiguration>();
+            _configuration = A.Fake<IConfiguration>();
         }
         [Fact]
         public async Task MerchantController_GetMerchants_ListMerchantAsync()
@@ -269,7 +268,18 @@ namespace AmazonAPITesting.Amazon_Controller
 
             };
             A.CallTo(() => _merchantRepository.MerchantLogin(merchant)).Returns(merchant);
-            var controller = new MerchantController(_merchantRepository, _configuration);
+            var myConfiguration = new Dictionary<string, string>
+            {
+                {"JWT:ValidAudience", "User"},
+                {"JWT:ValidIssuer", "http://localhost:33129"},
+                {"JWT:Secret","JWTAuthenticationHIGHsecuredPasswordVVVp1OH7Xzyr"}
+            };
+            var _configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(myConfiguration)
+                .Build();
+
+            var controller = new MerchantController(_merchantRepository,_configuration);
+            
 
             //Act
             var result = await controller.MerchantLogin(merchant);
