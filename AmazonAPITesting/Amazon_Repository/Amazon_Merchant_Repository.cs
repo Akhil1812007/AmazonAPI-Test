@@ -1,13 +1,18 @@
 ﻿using AmazonAPI.Models;
 using AmazonAPI.Repository;
 using AmazonAPITesting.AmazonDBContext;
+using Castle.Core.Configuration;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Equivalency.Tracing;
+using LinqToDB.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace AmazonAPITesting.Amazon_Repository
 {
@@ -166,6 +171,7 @@ namespace AmazonAPITesting.Amazon_Repository
         public async Task MerchantRepo_GetAllMerchant_ReturnMerchant()
         {
             //Arrange
+            
             var dbContext = await GetDatabaseContext(); //This one calls the inmemory database
             var MerchantRepository = new MerchantRepository(dbContext); //repo layer object calling
 
@@ -191,8 +197,46 @@ namespace AmazonAPITesting.Amazon_Repository
             // result.Count().Should().Be(4);
             "Boost2".Should().Be(tempProduct.ProductName);
         }
+        private readonly IConfiguration _configuration;
+
+        [Fact]
+        public async Task MerchantREpository_MerchantLogin_ReturnMerchant()
+        {
+            //Arrange
+            
+            MerchantToken ExpectedMerchantToken = new MerchantToken()
+            {
+                merchant = new Merchant()
+                {
+                    MerchantId = 1001,
+                    MerchantEmail = "akhil0@gmail.com",
+                    MerchantName = "akhil0",
+                    MerchantPassword = "12345",
+                    ConfirmPassword = "12345",
+                },
+                merchantToken = "nfkvjdbkjvfjkbfekjbvkjkjbkjbnoiu9898",
 
 
+            };
+            Merchant merchant = new Merchant()
+            {
+                MerchantEmail = "akhil0@gmail.com",
+                MerchantName = "akhil0",
+                MerchantPassword = "12345",
+                ConfirmPassword = "12345",
+            };
+
+            var Inmemory = new AmazonInMemoryDatabase();
+            var dbContext = await Inmemory.GetDatabaseContext();
+            var InMemeoryConf = _configuration;
+            var merchantRepository = new MerchantRepository(dbContext, InMemeoryConf);
+
+            //Act
+            var result = await merchantRepository.MerchantLogin(merchant);
+
+            //assert
+            result.Should().NotBeNull();
+        }
 
     }
 }

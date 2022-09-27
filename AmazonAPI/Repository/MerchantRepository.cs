@@ -94,43 +94,18 @@ namespace AmazonAPI.Repository
             return Merchant;
 
         }
-        public async Task<MerchantToken> MerchantLogin(Merchant m)
+        public async Task<Merchant> MerchantLogin(Merchant m)
         {
-            MerchantToken mt=new MerchantToken();
             var merchant =await  (from i in _context.Merchants where i.MerchantEmail == m.MerchantEmail && i.MerchantPassword == m.MerchantPassword select i).FirstOrDefaultAsync();
             if (merchant != null)
             {
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, merchant.MerchantEmail),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-
-                var token = GetToken(authClaims);
-                string s= new JwtSecurityTokenHandler().WriteToken(token);
-                mt.merchantToken = s;
-                mt.merchant=merchant;
-                return mt;
+                return merchant;
 
             }
             return null;
         }
 
-        private JwtSecurityToken GetToken(List<Claim> authClaims)
-        {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:ValidIssuer"],
-                audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddMinutes(30),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                ); ;
-
-            return token;
-        }
+        
 
         
     }

@@ -10,7 +10,7 @@ namespace AmazonAPI.Repository
         public Task<Merchant> InsertMerchant(Merchant Merchant);
         public Task<bool> DeleteMerchant(int? MerchantId);
         public Task<Merchant> UpdateMerchant(int MerchantId,Merchant merchant);
-        public Task<MerchantToken> MerchantLogin(Merchant merchant);
+        public Task<Merchant> MerchantLogin(Merchant merchant);
 
         public Task<List<Product>> GetProductByMerchantId(int id);
 

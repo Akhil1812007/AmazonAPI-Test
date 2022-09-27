@@ -14,15 +14,21 @@ using FluentAssertions.Equivalency.Tracing;
 using NuGet.Protocol.Core.Types;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Configuration;
+using Moq;
 
 namespace AmazonAPITesting.Amazon_Controller
 {
     public class Amazon_Controller_Merchant
     {
         private readonly IMerchantRepository _merchantRepository;
+        //private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration ;   
         public Amazon_Controller_Merchant()
         {
             _merchantRepository = A.Fake<IMerchantRepository>();
+            _configuration = new  Mock<IConfiguration>();
         }
         [Fact]
         public async Task MerchantController_GetMerchants_ListMerchantAsync()
@@ -30,26 +36,26 @@ namespace AmazonAPITesting.Amazon_Controller
             //Arrange
             var MerchantList = new List<Merchant>();
             int temp = 1000;
-            for(int i=0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Merchant merchant = new Merchant
                 {
                     MerchantId = ++temp,
-                    MerchantEmail = "akhil"+i+"@gmail.com",
-                    MerchantName = "Akhil"+i,
+                    MerchantEmail = "akhil" + i + "@gmail.com",
+                    MerchantName = "Akhil" + i,
                     MerchantPassword = "12345",
                     ConfirmPassword = "12345",
                 };
-                MerchantList.Add(merchant); 
-            } 
-                
+                MerchantList.Add(merchant);
+            }
+
 
             A.CallTo(() => _merchantRepository.GetMerchant()).Returns(MerchantList);
-            var MerchantController = new MerchantController(_merchantRepository);
+            var MerchantController = new MerchantController(_merchantRepository,_configuration);
             //var expected = A.Fake<Task<ActionResult<List<Merchant>>>>();
 
             //Act
-            var result = await  MerchantController.GetMerchants();
+            var result = await MerchantController.GetMerchants();
 
             //Assert
             result.Should().NotBeNull();
@@ -71,19 +77,19 @@ namespace AmazonAPITesting.Amazon_Controller
                 ConfirmPassword = "12345",
             };
             A.CallTo(() => _merchantRepository.GetMerchantByID(1000)).Returns(merchant);
-            var MerchantController = new MerchantController(_merchantRepository);
+            var MerchantController = new MerchantController(_merchantRepository,_configuration);
 
             //Act
-            var Tempresult =await  MerchantController.GetMerchant(merchantId);
-            var result= (Tempresult.Result as OkObjectResult).Value as Merchant;
-            
+            var Tempresult = await MerchantController.GetMerchant(merchantId);
+            var result = (Tempresult.Result as OkObjectResult).Value as Merchant;
+
             //Assert
             result.Should().NotBeNull();
-            
-            
-            
 
-            
+
+
+
+
 
 
 
@@ -101,10 +107,10 @@ namespace AmazonAPITesting.Amazon_Controller
                 MerchantPassword = "12345",
                 ConfirmPassword = "12345",
             };
-            A.CallTo(() => _merchantRepository.UpdateMerchant(1001,merchant)).Returns(merchant);
-            var MerchantController = new MerchantController(_merchantRepository);
+            A.CallTo(() => _merchantRepository.UpdateMerchant(1001, merchant)).Returns(merchant);
+            var MerchantController = new MerchantController(_merchantRepository, _configuration);
             //Act
-            var TempResult= await MerchantController.PutMerchant(Id, merchant);
+            var TempResult = await MerchantController.PutMerchant(Id, merchant);
             var result = TempResult.Value;
             //Assert
             var name = "Akhil1";
@@ -115,13 +121,13 @@ namespace AmazonAPITesting.Amazon_Controller
 
         }
         [Fact]
-        public async Task  DeleteMerchant_ReturnVoid()
+        public async Task DeleteMerchant_ReturnVoid()
         {
             //Arrange
             var merchantId = 1000;
-           
+
             A.CallTo(() => _merchantRepository.DeleteMerchant(merchantId)).Returns(true);
-            var Merchant = new MerchantController(_merchantRepository);
+            var Merchant = new MerchantController(_merchantRepository, _configuration);
 
             //Act
             var result = await Merchant.DeleteMerchant(merchantId);
@@ -144,9 +150,9 @@ namespace AmazonAPITesting.Amazon_Controller
 
             };
             //var traderspost = A.Fake<Traders>();
-           
+
             A.CallTo(() => _merchantRepository.InsertMerchant(merchant)).Returns(merchant);
-            var controller = new MerchantController(_merchantRepository);
+            var controller = new MerchantController(_merchantRepository, _configuration);
 
 
 
@@ -158,7 +164,7 @@ namespace AmazonAPITesting.Amazon_Controller
             //Assert
             "akhil".Should().Be(result.Value.MerchantName);
             "akhil@gmail.com".Should().Be(result.Value.MerchantEmail);
-            
+
         }
         [Fact]
         public async Task MerchantController_GetProductByMerchantId_Product()
@@ -181,7 +187,7 @@ namespace AmazonAPITesting.Amazon_Controller
                 p.Add(Product);
             }
             A.CallTo(() => _merchantRepository.GetProductByMerchantId(1000)).Returns(p);
-            var controller = new MerchantController(_merchantRepository);
+            var controller = new MerchantController(_merchantRepository, _configuration);
 
             //Act
             var result = await controller.GetProductByMerchantId(1000);
@@ -198,7 +204,7 @@ namespace AmazonAPITesting.Amazon_Controller
         {
             //Arrange           
             var merchantId = 1000;
-            var productId =1000;
+            var productId = 1000;
             List<Product> p = new List<Product>();
             for (int i = 0; i < 10; i++)
             {
@@ -214,7 +220,7 @@ namespace AmazonAPITesting.Amazon_Controller
                 p.Add(Product);
             }
             A.CallTo(() => _merchantRepository.GetProductByMerchantId(merchantId)).Returns(p);
-            var controller = new MerchantController(_merchantRepository);
+            var controller = new MerchantController(_merchantRepository, _configuration);
 
             //Act
             var result = await controller.GetProductByMerchantId(merchantId);
@@ -240,7 +246,7 @@ namespace AmazonAPITesting.Amazon_Controller
         {
 
             //Arrange
-            var exceptedToken= RandomString(20);
+            var exceptedToken = RandomString(20);
             var merchant = new Merchant()
             {
                 MerchantId = 1001,
@@ -260,20 +266,17 @@ namespace AmazonAPITesting.Amazon_Controller
                     ConfirmPassword = "12345",
                 },
                 merchantToken = exceptedToken,
-                
 
             };
-            A.CallTo(() => _merchantRepository.MerchantLogin(merchant)).Returns(merchantToken);
-            var controller = new MerchantController(_merchantRepository);
+            A.CallTo(() => _merchantRepository.MerchantLogin(merchant)).Returns(merchant);
+            var controller = new MerchantController(_merchantRepository, _configuration);
 
             //Act
-            var Tempresult = await controller.MerchantLogin(merchant);
-            var result = (Tempresult.Result as OkObjectResult).Value as MerchantToken;
+            var result = await controller.MerchantLogin(merchant);
 
             //Assert
-            Tempresult.Should().Be(typeof(ActionResult<MerchantToken>));
-            result.merchantToken.Should().Be(exceptedToken);
 
+            result.Should().NotBeNull();
         }
 
     }
