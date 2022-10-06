@@ -95,7 +95,7 @@ namespace AmazonAPITesting.Amazon_Controller
             //
             tempResult.Should().NotBeNull();
             tempResult.total.Should().Be(100);
-            tempResult.Should()
+            tempResult.Should();
             
             
         }
