@@ -25,7 +25,7 @@ namespace AmazonAPITesting.Amazon_Controller
         public async Task OrderController_GetOrderMasterById_ReturnOmId()
         {
             //Arrange
-            var id = 5000;
+            var id = 5001;
             var ordermaster = new OrderMaster()
             {
 
@@ -40,9 +40,9 @@ namespace AmazonAPITesting.Amazon_Controller
             var OrderMasterController = new OrderController(_orderrepository, _cartrepository);
             //Act
             var tempResult = await OrderMasterController.GetOrderMaster(id);
-            var result = (tempResult.Result as OkObjectResult).Value as OrderMaster;
+            var result = tempResult.Value;
             //Assert
-            var card = 234567890986;
+            var card = 123456780;
             card.Should().Be(ordermaster.CardNumber);
             result.Should().As<OrderMaster>();
         }
@@ -95,6 +95,7 @@ namespace AmazonAPITesting.Amazon_Controller
             //
             tempResult.Should().NotBeNull();
             tempResult.total.Should().Be(100);
+            tempResult.Should()
             
             
         }

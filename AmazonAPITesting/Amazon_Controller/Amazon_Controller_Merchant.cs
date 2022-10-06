@@ -3,18 +3,9 @@ using AmazonAPI.Repository;
 using AmazonAPI.Controllers;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using FluentAssertions;
-using Xunit;
-using FluentAssertions.Equivalency.Tracing;
-using NuGet.Protocol.Core.Types;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Microsoft.AspNetCore.Http.Features;
+
 using Microsoft.Extensions.Configuration;
 using Moq;
 
@@ -268,6 +259,7 @@ namespace AmazonAPITesting.Amazon_Controller
 
             };
             A.CallTo(() => _merchantRepository.MerchantLogin(merchant)).Returns(merchant);
+            //_adding duplicate configuration for JWT for to generate
             var myConfiguration = new Dictionary<string, string>
             {
                 {"JWT:ValidAudience", "User"},
@@ -278,7 +270,8 @@ namespace AmazonAPITesting.Amazon_Controller
                 .AddInMemoryCollection(myConfiguration)
                 .Build();
 
-            var controller = new MerchantController(_merchantRepository,_configuration);
+
+            var controller = new MerchantController(_merchantRepository,_configuration );
             
 
             //Act

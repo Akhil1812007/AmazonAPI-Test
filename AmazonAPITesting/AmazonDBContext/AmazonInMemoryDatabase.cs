@@ -76,7 +76,7 @@ using System.Threading.Tasks;
                          {
                              OrderMasterId = orderMasterInitial++,
                              CustomerId = 1000,
-                             CardNumber = 12345678+ ++i,
+                             CardNumber = 12345678+i,
                              total = 1200 + i,
                              AmountPaid = 1200 + i,
 
